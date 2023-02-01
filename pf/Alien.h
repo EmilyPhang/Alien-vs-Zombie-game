@@ -17,8 +17,8 @@ class Alien {
         //setter
         void setLife(int newLife);
         void setAttack(int newAttack);
-        // void setAlienRow(int newAlienRow);
-        // void setAlienCol(int newAlienCol);
+        void setAlienRow(int newAlienRow);
+        void setAlienCol(int newAlienCol);
         void setLocation(int newRow, int newCol);
         void setIsMyTurn(bool newTurn);
         

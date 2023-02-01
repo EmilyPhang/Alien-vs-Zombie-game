@@ -37,6 +37,14 @@ void Alien::setAttack(int newAttack){
     this->Attack = newAttack;
 };
 
+void Alien::setAlienRow(int newAlienRow){
+    this->AlienRow = newAlienRow;
+}
+
+void Alien::setAlienCol(int newAlienCol){
+    this->AlienCol = newAlienCol;
+}
+
 void Alien::setLocation(int newRow, int newCol){
     //Old location
     pf::updateBoard(this->AlienRow, this->AlienCol, '.');

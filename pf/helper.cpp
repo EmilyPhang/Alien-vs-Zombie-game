@@ -259,9 +259,9 @@ namespace pf
                     std::cout << row + 1 << "\t";
                 }
                 std::cout << "|" << pf::kBoardPointer[row][col];
-                // if (pf::kBoardPointer[row][col]=='.')
+                // if (pf::kBoardPointer[row][col]=='^')
                 // {
-                //     cout<<"DOT!!!"<<row<<","<<col<<endl;
+                //     cout<<"up!!!"<<row<<","<<col<<endl;
                 // }
                 
             }
@@ -305,7 +305,7 @@ namespace pf
         int rowCount = 0; 
 
         // Read from the text file
-        ifstream ReadLineFile("baord.txt");
+        ifstream ReadLineFile("board.txt");
 
         // Get Row in file
         if(ReadLineFile.is_open())
@@ -329,18 +329,34 @@ namespace pf
             kBoardPointer[i] = new char[line.length()];     //cols
         }
 
-        ifstream ReadContentFile("baord.txt");
+        ifstream ReadContentFile("board.txt");
+        rowCount = 0; 
         if(ReadContentFile.is_open())
         {
             while(ReadContentFile.peek()!=EOF)
             {
                 getline(ReadContentFile, line);
+                
                 for(int col=0; col<line.length(); col++){
+                    if (line[col] =='A'){
+                        pf::alienPlayer.setAlienRow(rowCount);
+                        pf::alienPlayer.setAlienCol(col);
+                        pf::updateBoard(rowCount, col, pf::alienPlayer.getAlienLogo());
+                    }
+                    else if (isdigit(line[col])){
+                        pf::zombiePlayer[line[col]-1].setZombieRow(rowCount);
+                        pf::zombiePlayer[line[col]-1].setZombieCol(col);
+                        pf::updateBoard(rowCount, col, pf::zombiePlayer[line[col]-1].getZombieLogo());
+                    }
                     pf::kBoardPointer[rowCount][col] = line[col];
+                    
+                    cout<<line[col];
+                    
                 }
+                cout<<endl;
                 rowCount++;
-
             }
+            cout<<"here"<<pf::kBoardPointer[0][0]<<endl;
         
             ReadContentFile.close();
         }
@@ -405,10 +421,10 @@ namespace pf
                         cin.get();
                         cin.clear();
                         //cout << "Alien's turn ends .The trail is reset." << endl;
-                        pf::ShowGameBoard();
-                        cout << "Alien's turn ends .The trail is reset." << endl;
-                        cout << "(Player) Press any key to continue . . .  \n";
-                        cin.ignore();
+                        //pf::ShowGameBoard();
+                        //cout << "Alien's turn ends .The trail is reset." << endl;
+                        //cout << "(Player) Press any key to continue . . .  \n";
+                        //cin.ignore();
                         //cin.get();
                         //cin.clear();
                         pf::alienPlayer.setAttack(0);
