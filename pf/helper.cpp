@@ -330,7 +330,6 @@ namespace pf
         }
 
         ifstream ReadContentFile("board.txt");
-        rowCount = 0; 
         if(ReadContentFile.is_open())
         {
             while(ReadContentFile.peek()!=EOF)
@@ -349,14 +348,9 @@ namespace pf
                         pf::updateBoard(rowCount, col, pf::zombiePlayer[line[col]-1].getZombieLogo());
                     }
                     pf::kBoardPointer[rowCount][col] = line[col];
-                    
-                    cout<<line[col];
-                    
                 }
-                cout<<endl;
                 rowCount++;
             }
-            cout<<"here"<<pf::kBoardPointer[0][0]<<endl;
         
             ReadContentFile.close();
         }

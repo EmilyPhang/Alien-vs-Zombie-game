@@ -113,51 +113,55 @@ bool Alien::move(string command){
     else if (command == "right"){
         newCol += 1; //right
     }
-
+    cout<<"Next: "<<newRow<<","<<newCol<<endl;
     // Get current location item
-    command = touchGameObj(command, newRow, newCol);
-    //cout<<"MY COMMAND: "<<command<<endl;
-    if (command == "rock"){
-        // Change Rock to '.' so that later the reset will random generate
-        int random_number = std::rand() % 7;
-        char newObj = pf::CreateGameObj(random_number);
-        if (newObj==' '){
-            cout << "Alien discovers nothing beneath the rock." << endl;
-        }
-        else if(newObj == '^'){
-            cout<< "Alien discovers an up arrow beneath the rock."<<endl;
-        }
-        else if(newObj == 'v'){
-            cout<< "Alien discovers a down arrow beneath the rock."<<endl;
-        }
-        else if(newObj == '>'){
-            cout<< "Alien discovers a right arrow beneath the rock."<<endl;
-        }
-        else if(newObj == '<'){
-            cout<< "Alien discovers a left arrow beneath the rock."<<endl;
-        }
-        else if(newObj == 'p'){
-            cout<< "Alien discovers a pod beneath the rock."<<endl;
-        }
-        else if(newObj == 'h'){
-            cout<< "Alien discovers a health pack beneath the rock."<<endl;
-        }
-        pf::updateBoard(newRow, newCol, newObj);
-        pf::updateBoard(this->AlienRow, this->AlienCol, this->getAlienLogo());
-        // cout << "Alien's turn ends .The trail is reset." << endl;
-        return false;
-        // cout<<"Press any key to continue . . . \n";
-        // cin.ignore();
-        // cin.get();
-        // cin.clear();
-        //pf::ShowGameBoard();
+    bool valid = moveValidation(newRow, newCol);
+    cout<<"Valid: "<<valid<<endl;   
+    
+    if(valid){
+        // cout<<"hihi"<<endl;
+        command = touchGameObj(command, newRow, newCol);
+        if (command == "rock"){
+            // Change Rock to '.' so that later the reset will random generate
+            int random_number = std::rand() % 7;
+            char newObj = pf::CreateGameObj(random_number);
+            if (newObj==' '){
+                cout << "Alien discovers nothing beneath the rock." << endl;
+            }
+            else if(newObj == '^'){
+                cout<< "Alien discovers an up arrow beneath the rock."<<endl;
+            }
+            else if(newObj == 'v'){
+                cout<< "Alien discovers a down arrow beneath the rock."<<endl;
+            }
+            else if(newObj == '>'){
+                cout<< "Alien discovers a right arrow beneath the rock."<<endl;
+            }
+            else if(newObj == '<'){
+                cout<< "Alien discovers a left arrow beneath the rock."<<endl;
+            }
+            else if(newObj == 'p'){
+                cout<< "Alien discovers a pod beneath the rock."<<endl;
+            }
+            else if(newObj == 'h'){
+                cout<< "Alien discovers a health pack beneath the rock."<<endl;
+            }
+            pf::updateBoard(newRow, newCol, newObj);
+            pf::updateBoard(this->AlienRow, this->AlienCol, this->getAlienLogo());
+            // cout << "Alien's turn ends .The trail is reset." << endl;
+            return false;
+            // cout<<"Press any key to continue . . . \n";
+            // cin.ignore();
+            // cin.get();
+            // cin.clear();
+            //pf::ShowGameBoard();
 
-    }
-    else if (command == "attack"){
-        attackZombie(newRow, newCol);
-        return false;
-    }
-    else if(moveValidation(newRow, newCol)){
+        }
+        else if (command == "attack"){
+            attackZombie(newRow, newCol);
+            return false;
+        }
+        
         //Move to new location
         setLocation(newRow, newCol);        
 
@@ -171,19 +175,20 @@ bool Alien::move(string command){
         move(command);
     }
     else {
+        // cout<<"hoho"<<endl;
         // // Wait for next step
-        setLocation(newRow, newCol);
+        // setLocation(newRow, newCol);
         cout<<"Press any key to continue . . .  ";
         cin.ignore();
         //cin.get();
         pf::ShowGameBoard();
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         cout<<"Alien hits a border."<<endl;
         cout<<"else..."<<endl;
         cout<<"Press any key to continue . . .  ";
         cin.ignore();
         pf::ShowGameBoard();
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         cout << "Alien's turn ends .The trail is reset." <<endl;
         return false; // Stop
     }
@@ -195,26 +200,26 @@ bool Alien::moveValidation(int newRow, int newCol){
     // Check if the next movement at boarder
     int boardRow = pf::getBoardRow();
     int boardCol = pf::getBoardCol();
-    //cout<<"Next: "<<newRow<<","<<newCol<<endl;
+    // cout<<"Next: "<<newRow<<","<<newCol<<endl;
 
-    if(newRow <= 0){
+    if(newRow < 0){
         cout<<"Alien Hit Top Border"<<endl;
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         return false;
     }
-    else if (newCol <=0 ){
+    else if (newCol < 0 ){
         cout<<"Alien Hit Left Border"<<endl;
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         return false;
     }
     else if (newRow >= boardRow){
         cout<<"Alien Hit Bottom Border"<<endl;
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         return false;
     }
     else if (newCol >= boardCol){
         cout<<"Alien Hit Right Border"<<endl;
-        pf::getBoardChar(newRow, newCol);
+        // pf::getBoardChar(newRow, newCol);
         return false;
     }
 
