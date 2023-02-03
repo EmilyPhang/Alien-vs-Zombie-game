@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <fstream>
 #include <bits/stdc++.h>
+#include <string>
 using namespace std;
 
 namespace pf
@@ -355,11 +356,15 @@ namespace pf
     }
 
     void saveBoard(){
-        cout<<"saving"<<endl;
+        string save_file_name;
+        cout<< "Save File name: ";
+        cin >> save_file_name;
+        cout<<"saving..."<<endl;
+        cout<<"Saved!"<<endl;
         ofstream myfile;
         int kRows = pf::boardRow;
         int kColumns = pf::boardCol;
-        myfile.open ("board.txt");
+        myfile.open (save_file_name);
                 
         myfile<<alienPlayer.getIsMyTurn()<<","<<alienPlayer.getLife()<<","<<alienPlayer.getAttack()<<endl;
         for (int i = 0; i < pf::getZombieCount(); i++){
@@ -379,14 +384,18 @@ namespace pf
     }
 
     void loadBoard(){
-        cout<<"loading"<<endl;
+        string load_file_name;
+        cout<< "Load File name: ";
+        cin>> load_file_name;
+        cout<<"loading..."<<endl;
+        cout<<"Loading Done!"<<endl;
         string line;
         int numRows=0;    // Variable to keep count of each line
         int rowCount = 0; 
         int numZombie = 0;
         bool boardInfo = false; 
         // Read from the text file
-        ifstream ReadLineFile("board.txt");
+        ifstream ReadLineFile(load_file_name);
 
         // Get Row in file
         if(ReadLineFile.is_open())
@@ -424,7 +433,7 @@ namespace pf
         pf::boardRow = numRows;
         pf::zombieCount = numZombie;
 
-        ifstream ReadContentFile("board.txt");
+        ifstream ReadContentFile(load_file_name);
         boardInfo = false; 
         int zombieCounter = 0; 
         rowCount = 0;
@@ -590,6 +599,16 @@ namespace pf
                 saveBoard();
             }
             else if (command =="load"){
+                string save_answer;
+                bool save_option = false;
+                cout<< "Would you like to save current game board?(y/n)";
+                cin >> save_answer;
+                if ((save_answer == "Y") || (save_answer == "y")){
+                    save_option = true;
+                }
+                if(save_option == true){
+                    saveBoard();
+                }
                 loadBoard();
             }
             else if (command =="arrow"){
