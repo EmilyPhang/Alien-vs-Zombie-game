@@ -299,6 +299,11 @@ bool Zombie::touchGameObj(int newRow, int newCol){
 Alien Zombie::attackAlien(){
     Alien alienPlayer = pf::getAlienPlayer(); // copy of alien
     int distance = pf::pointDistance(this->ZombieRow, this->ZombieCol, alienPlayer.getAlienRow(), alienPlayer.getAlienCol());
+    if(this->ZombieRow != alienPlayer.getAlienRow() ){
+                distance +=1;
+                
+            }
+    cout<< distance <<endl;
     if(distance <= this->Range){
         int alienLife = alienPlayer.getLife();
         alienLife -= this->Attack; 

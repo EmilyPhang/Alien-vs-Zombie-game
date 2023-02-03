@@ -362,10 +362,12 @@ int Alien::ZombieMinDistance(int newRow, int newCol){
     int minDistance = pf::getBoardRow() * pf::getBoardCol(); 
     for(int i=0; i<pf::getZombieCount(); i++){
         if(zombiePLayer[i].getLife() > 0){
-            int alienZombieDistane = pf::pointDistance(newRow, newCol, 
+            
+            int alienZombieDistance = pf::pointDistance(newRow, newCol, 
                                                 zombiePLayer[i].getZombieRow(), zombiePLayer[i].getZombieCol());
-            cout<<"Distance: "<<alienZombieDistane<<endl;
-            minDistance = min(minDistance, alienZombieDistane);
+            
+            cout<<"Distance: "<<alienZombieDistance<<endl;
+            minDistance = min(minDistance, alienZombieDistance);
         }
     }
     cout<<"Min Distance: "<<minDistance<<endl;
