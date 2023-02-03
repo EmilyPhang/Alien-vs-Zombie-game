@@ -539,6 +539,8 @@ namespace pf
         return (pow((x2-x1),2 ) + pow((y2-y1),2));
     }
 
+
+
     void StartGame()
     {
         bool toQuit = false;
@@ -617,6 +619,19 @@ namespace pf
                         pf::ShowGameBoard();
                         pf::zombiePlayer[i].move();
                         pf::alienPlayer = pf::zombiePlayer[i].attackAlien();
+                        cout << "(Player) Press any key to continue . . .  \n";
+                        cin.ignore();
+                        cin.get();
+                        cin.clear();
+                        int alienLife = alienPlayer.getLife();
+                        if(alienLife ==0){
+                            pf::ShowGameBoard();
+
+                            cout<< "Alien died. Game over." << endl;
+
+                            break; //////////////////////
+                        }
+        
                         pf::passTurn();
 
                         cout << "(Player) Press any key to continue . . .  \n";
@@ -625,7 +640,15 @@ namespace pf
                         cin.clear();
                     }
                 }
+                int alienLife = alienPlayer.getLife();
+                if(alienLife ==0){
+                    break;
+                    }
+                }
+            }
+
+
             }
         }
-    }
-}
+    
+

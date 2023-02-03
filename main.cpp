@@ -22,108 +22,122 @@ void DisplayGameSettings(int row,int col,int zombie_count)
     cout << "\nDo you wish to change the game settings (y/n)? => ";
 }
 
-int main()
-{   
-    // int row = 5 ; //default
-    // int col = 21 ; //defaul
-    int row = 5 ; //default
-    int col = 9 ; //default
-    int zombie_count = 1 ; //default
-    bool setting_option = false ; 
-    string option = "N";
-    cout << "Assignment (Part 1)" << endl;
-    cout << "Let's Get Started!" << endl;
-    DisplayGameSettings(row, col, zombie_count);
-    cin >> option;
-    // cout << endl;
-    if ((option == "Y") || (option == "y"))
-    {
-        setting_option = true;
-    }
-    //cout << setting_option; //need to remove
-    if(setting_option == true)
-    {   
-        int i = 0;
-        cout << "Board Settings" <<endl;
-        cout << "--------------" << endl;
-        while (i == 0)
-          {
-            cout << "Enter Rows => ";
-            cin >> row;
-
-            if (row % 2 == 0)
-            {
-              i = 0;
-              cout << " Pls fill an odd number " << endl;
-              continue;
-            }
-            else 
-            {
-              i = 1;
-              break;
-            }
-            
-          }
-        
-        /*if (row%2 == 0){
-          cout << "Please enter an odd number"
-        }*/
+int main(){   
+    bool Playagain = true;
+    while(Playagain){
       
-        /*cout << "Enter columns => " ;
-        cin >> col;*/
-        i = 0;
-        while (i == 0)
-          {
-            cout << "Enter columns => ";
-            cin >> col;
+      // int row = 5 ; //default
+      // int col = 21 ; //defaul
+      int row = 5 ; //default
+      int col = 9 ; //default
+      int zombie_count = 2 ; //default
+      bool setting_option = false ; 
+      string option = "N";
+      cout << "Assignment (Part 1)" << endl;
+      cout << "Let's Get Started!" << endl;
+      DisplayGameSettings(row, col, zombie_count);
+      cin >> option;
+      // cout << endl;
+      if ((option == "Y") || (option == "y"))
+      {
+          setting_option = true;
+      }
+      //cout << setting_option; //need to remove
+      if(setting_option == true)
+      {   
+          int i = 0;
+          cout << "Board Settings" <<endl;
+          cout << "--------------" << endl;
+          while (i == 0)
+            {
+              cout << "Enter Rows => ";
+              cin >> row;
 
-            if (col % 2 == 0)
-            {
-              i = 0;
-              cout << " Pls fill an odd number " << endl;
-              continue;
+              if (row % 2 == 0)
+              {
+                i = 0;
+                cout << " Pls fill an odd number " << endl;
+                continue;
+              }
+              else 
+              {
+                i = 1;
+                break;
+              }
+              
             }
-            else 
-            {
-              i = 1;
-              break;
-            }
-            
-          }
-        cout << endl;
+          
+          /*if (row%2 == 0){
+            cout << "Please enter an odd number"
+          }*/
         
-        i = 0;
-        while (i == 0)
-          {
-            cout << "Zombie Settings" <<endl;
-            cout << "---------------" << endl;
-            cout << "Enter number of zombies => " ;
-            cin >> zombie_count;
-            cout << endl;
-            if (zombie_count == 0 | zombie_count > 9)
+          /*cout << "Enter columns => " ;
+          cin >> col;*/
+          i = 0;
+          while (i == 0)
             {
-              i = 0;
-              cout << "Please enter a number from 1 to 9." << endl;
+              cout << "Enter columns => ";
+              cin >> col;
+
+              if (col % 2 == 0)
+              {
+                i = 0;
+                cout << " Pls fill an odd number " << endl;
+                continue;
+              }
+              else 
+              {
+                i = 1;
+                break;
+              }
+              
+            }
+          cout << endl;
+          
+          i = 0;
+          while (i == 0)
+            {
+              cout << "Zombie Settings" <<endl;
+              cout << "---------------" << endl;
+              cout << "Enter number of zombies => " ;
+              cin >> zombie_count;
               cout << endl;
-              continue;
+              if (zombie_count == 0 | zombie_count > 9)
+              {
+                i = 0;
+                cout << "Please enter a number from 1 to 9." << endl;
+                cout << endl;
+                continue;
+              }
+              else 
+              {
+                i = 1;
+                break;
+              }
             }
-            else 
-            {
-              i = 1;
-              break;
-            }
-          }
-        cout << endl;
-        cout << "Settings Updated.\n" ;
-        cout << endl;
-        
-        pf::Pause();
+          cout << endl;
+          cout << "Settings Updated.\n" ;
+          cout << endl;
+          
+          pf::Pause();
+      }
+      
+      //DisplayGameSettings(row, col, zombie_count); //remove
+      pf::CreateGameBoard(row, col, zombie_count);
+      // pf::ShowGameBoard();
+          
+      pf::StartGame();
+      //pf::Pause();
+      cout << "Would you like to play again?(y/n) ";
+      
+      string answer;
+      cin >> answer;
+      cout<< endl;
+      if((answer == "N")|| (answer == "n")){
+        Playagain = false;
+        cout << "Thanks for playing! Bye!"<< endl;
+      }
+      
     }
     
-    //DisplayGameSettings(row, col, zombie_count); //remove
-    pf::CreateGameBoard(row, col, zombie_count);
-    // pf::ShowGameBoard();
-        
-    pf::StartGame();
-    //pf::Pause();
 }

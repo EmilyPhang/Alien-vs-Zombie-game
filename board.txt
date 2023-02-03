@@ -1,5 +1,9 @@
-^<hp<  <>^ rhv<vpp3^>
-v<> > ^^< v1ph^v hhpr
-<rrr>^vvrhA^h> ^hr  <
-v> r r2<>rr>ph>p<h>h^
-p h>vh^ ^p^v ^v< ^pv<
+1,50,0
+0,80,90,10
+0,10,80,4
+===
+^v^rA<>hh
+ r1hrh^pp
+v2^< ^<h>
+<^^^<pr>r
+hp <hhv< 

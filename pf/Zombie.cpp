@@ -304,6 +304,7 @@ Alien Zombie::attackAlien(){
         alienLife -= this->Attack; 
         alienPlayer.setLife(alienLife);
         cout<<"Zombie "<<this->getZombieLogo() <<" attacked Alien with damage of "<<this->Attack<<endl;
+        
     }
     return alienPlayer; 
 }
