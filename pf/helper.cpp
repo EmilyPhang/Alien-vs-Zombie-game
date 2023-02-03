@@ -14,6 +14,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <bits/stdc++.h>
 using namespace std;
 
 namespace pf
@@ -40,9 +41,12 @@ namespace pf
     {
         return zombieCount;
     }
-    Zombie *getZombiePlayer()
+    Zombie* getZombiePlayer()
     {
         return zombiePlayer;
+    }
+    Alien getAlienPlayer(){
+        return alienPlayer;
     }
 
     static string horozontalBoarder(string s, int n)
@@ -167,16 +171,19 @@ namespace pf
         // Generate Zombie
         for (int zombie_index = 0; zombie_index < zombie_count; zombie_index++)
         {
-            pf::zombiePlayer[zombie_index] = Zombie(char(zombie_index + 49));
+            pf::zombiePlayer[zombie_index] = Zombie(char(zombie_index + 49),0 ,0);
             int range = max(rand() % (min(kRows, kColumns)), 1);
             pf::zombiePlayer[zombie_index].setRange(range);
             int zombieRow, zombieCol; 
-            do
-            {
+            bool validity = true; 
+            while(validity){
                 zombieRow = std::rand() % kRows;
                 zombieCol = std::rand() % kColumns;
-            } while (zombieRow == pf::alienPlayer.getAlienRow() and zombieCol == pf::alienPlayer.getAlienCol());
-            
+                cout<<"hihi" << zombieRow <<","<<zombieCol<<endl;
+                validity = validLocation(zombieRow,zombieCol);
+                cout<<"Valid: "<<validity<<endl;
+            }
+           
 
             pf::zombiePlayer[zombie_index].setZombieRow(zombieRow);
             pf::zombiePlayer[zombie_index].setZombieCol(zombieCol);
@@ -210,6 +217,69 @@ namespace pf
         else if (random_number == 7)
             return 'r';
         return ' ';
+    }
+
+    bool validLocation(int newRow, int newCol){
+        Zombie* zombiePlayer =  pf::getZombiePlayer();
+        Alien alienPlayer = pf::getAlienPlayer(); 
+        cout<<endl;
+        cout<<"Next: "<<newRow <<","<<newCol<<endl;
+        cout<<"Alien: "<<alienPlayer.getAlienRow()<<","<< alienPlayer.getAlienCol()<<endl;
+        for(int i=0; i<pf::getZombieCount(); i++){
+            cout<<"Zombie "<<i<<" : "<<zombiePlayer[i].getZombieRow()<<","<<zombiePlayer[i].getRange()<<endl;
+            if (alienPlayer.getAlienRow() == newRow and
+                alienPlayer.getAlienCol() == newCol )
+                {
+                    cout<<"Retry"<<endl;
+                    return true; 
+                }
+            if(
+                zombiePlayer[i].getZombieRow() == newRow and 
+                zombiePlayer[i].getZombieCol() == newCol 
+                ){
+                    cout<<"Retry"<<endl;
+                    return true; 
+                }
+        }
+        return false; 
+    }
+
+    void passTurn(){
+        cout<<"Passing world"<<endl;
+        if(pf::alienPlayer.getIsMyTurn()){
+            //Alien to Zombie
+            pf::alienPlayer.setIsMyTurn(false);
+            // Search for a valid zombie to pass to
+            for(int i =0 ; i<pf::getZombieCount() ; i++){
+                if (pf::zombiePlayer[i].getLife()>0){
+                    cout<<"Alien pass to Zombie "<<i+1<<endl;
+                    pf::zombiePlayer[i].setIsMyTurn(true);
+                    return ; 
+                }
+            }
+        }
+        else{
+            //Zombie to Zombie
+            for(int i =0 ; i<pf::getZombieCount() ; i++){
+                if(pf::zombiePlayer[i].getIsMyTurn()){
+                    pf::zombiePlayer[i].setIsMyTurn(false);
+                    // i is current i+1 is next
+                    for(int next = i+1 ; next <= pf::getZombieCount() ; next++){
+                         //Last zombie pass back to alien
+                        if(next==pf::getZombieCount()){
+                            cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Alien"<<endl;
+                            pf::alienPlayer.setIsMyTurn(true);
+                            return ; 
+                        }
+                        if(pf::zombiePlayer[next].getLife()>0){
+                            cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Zombie "<<pf::zombiePlayer[next].getZombieLogo()<<endl;
+                            pf::zombiePlayer[next].setIsMyTurn(true);
+                            return ; 
+                        }
+                    }
+                }
+            }
+        }
     }
 
     char getBoardChar(int row, int col)
@@ -274,11 +344,13 @@ namespace pf
                   << endl;
 
         pf::alienPlayer.printDescription();
-
+        // cout<<"Alien "<<pf::alienPlayer.getAlienLogo()<<" : "<<pf::alienPlayer.getAlienRow()<<" , "<<pf::alienPlayer.getAlienCol()<<endl;
         for (int zombie_index = 0; zombie_index < pf::zombieCount; zombie_index++)
         {
             pf::zombiePlayer[zombie_index].printDescription();
+            // cout<<"Zombie "<< pf::zombiePlayer[zombie_index].getZombieLogo() <<" : " << pf::zombiePlayer[zombie_index].getZombieRow() <<" , "<<pf::zombiePlayer[zombie_index].getZombieCol()<<endl;
         }
+        
     }
 
     void saveBoard(){
@@ -287,6 +359,12 @@ namespace pf
         int kRows = pf::boardRow;
         int kColumns = pf::boardCol;
         myfile.open ("board.txt");
+                
+        myfile<<alienPlayer.getIsMyTurn()<<","<<alienPlayer.getLife()<<","<<alienPlayer.getAttack()<<endl;
+        for (int i = 0; i < pf::getZombieCount(); i++){
+            myfile<<zombiePlayer[i].getIsMyTurn()<<","<<zombiePlayer[i].getLife()<<","<<zombiePlayer[i].getAttack()<<","<<zombiePlayer[i].getRange()<<endl;
+        }
+        myfile<<"===\n";
         for (int row = 0; row < kRows; row++)
         {
             for (int col = 0; col < kColumns; col++)
@@ -295,6 +373,7 @@ namespace pf
             }
             myfile<<"\n";
         }
+
         myfile.close();
     }
 
@@ -303,7 +382,8 @@ namespace pf
         string line;
         int numRows=0;    // Variable to keep count of each line
         int rowCount = 0; 
-
+        int numZombie = 0;
+        bool boardInfo = false; 
         // Read from the text file
         ifstream ReadLineFile("board.txt");
 
@@ -313,43 +393,104 @@ namespace pf
             while(ReadLineFile.peek()!=EOF)
             {
                 getline(ReadLineFile, line);
-                numRows++;
+                if(line == "==="){
+                    boardInfo = true;
+                }
+                if(boardInfo){
+                    numRows++;
+                }
+                else{
+                    numZombie++;
+                }
             }
-        
             ReadLineFile.close();
         }
         else
             cout<<"Couldn't open the file\n";
 
+        numZombie -= 1; // Remove alien 
+        numRows -= 1; // Remove "==="
         cout<<"Number of lines in the file are: "<<numRows<<endl;
+        cout<<"Number of Zombie: "<<numZombie<<endl;
+
         // create board 2d array
         kBoardPointer = new char *[numRows];         //row
         for (int i = 0; i < numRows; i++)
         {
             kBoardPointer[i] = new char[line.length()];     //cols
         }
+        pf::zombiePlayer = new Zombie[numZombie];
+        pf::boardRow = numRows;
+        pf::zombieCount = numZombie;
 
         ifstream ReadContentFile("board.txt");
+        boardInfo = false; 
+        int zombieCounter = 0; 
+        rowCount = 0;
         if(ReadContentFile.is_open())
         {
             while(ReadContentFile.peek()!=EOF)
             {
                 getline(ReadContentFile, line);
                 
-                for(int col=0; col<line.length(); col++){
-                    if (line[col] =='A'){
-                        pf::alienPlayer.setAlienRow(rowCount);
-                        pf::alienPlayer.setAlienCol(col);
-                        pf::updateBoard(rowCount, col, pf::alienPlayer.getAlienLogo());
-                    }
-                    else if (isdigit(line[col])){
-                        pf::zombiePlayer[line[col]-1].setZombieRow(rowCount);
-                        pf::zombiePlayer[line[col]-1].setZombieCol(col);
-                        pf::updateBoard(rowCount, col, pf::zombiePlayer[line[col]-1].getZombieLogo());
-                    }
-                    pf::kBoardPointer[rowCount][col] = line[col];
+                if(line=="==="){
+                    boardInfo = true; 
                 }
-                rowCount++;
+                if(boardInfo){
+                    // Load board
+                    if(line != "==="){
+                        for(int col=0; col<line.length(); col++){
+                            if (line[col] =='A'){
+                                pf::alienPlayer.setAlienRow(rowCount);
+                                pf::alienPlayer.setAlienCol(col);
+                                pf::updateBoard(rowCount, col, pf::alienPlayer.getAlienLogo());
+                            }
+                            else if (isdigit(line[col])){
+                                int zombieIndex = line[col]- 49 ; 
+                                pf::zombiePlayer[zombieIndex].setZombieRow(rowCount);
+                                pf::zombiePlayer[zombieIndex].setZombieCol(col);
+                                pf::updateBoard(rowCount, col, pf::zombiePlayer[zombieIndex].getZombieLogo());
+                            }
+                            pf::kBoardPointer[rowCount][col] = line[col];
+                        }
+                        rowCount++;
+                        pf::boardCol = line.length();
+                    }
+                }
+                else if(isdigit(line[0])){
+                    // load player
+                    vector<string> v;
+                    bool isMyTurn; 
+                    int life, attack, range; 
+                    stringstream ss(line);
+                    while (ss.good()) {
+                        string substr;
+                        getline(ss, substr, ',');
+                        v.push_back(substr);
+                    }
+                    // Alien status 
+                    if(v.size() == 3){
+                        istringstream(v[0]) >> isMyTurn; 
+                        istringstream(v[1]) >> life; 
+                        istringstream(v[2]) >> attack; 
+                        // cout<<"Alien: "<<isMyTurn << "<" <<life << "," <<attack<<endl;
+                        alienPlayer.setIsMyTurn(isMyTurn);
+                        alienPlayer.setLife(life);
+                        alienPlayer.setAttack(attack);
+                    }
+                    // Zombie status
+                    else if (v.size() == 4){
+                        istringstream(v[0]) >> isMyTurn; 
+                        istringstream(v[1]) >> life; 
+                        istringstream(v[2]) >> attack; 
+                        istringstream(v[3]) >> range; 
+                        // cout<<"Zombie "<<zombieCounter<<" is created"<<endl;
+                        pf::zombiePlayer[zombieCounter] = Zombie(char(zombieCounter + 49), isMyTurn, life, attack, range);
+                        zombieCounter++; 
+                    }
+                    v.clear();
+                }
+                
             }
         
             ReadContentFile.close();
@@ -358,12 +499,55 @@ namespace pf
             cout<<"Couldn't open the file\n";
     }
 
+    void arrowChange(int targetRow, int targetCol, std::string targetDirection){
+        char targetChar;
+        char currentChar = getBoardChar(targetRow, targetCol);
+
+        if(
+            currentChar == '^' or
+            currentChar == 'v' or
+            currentChar == '<' or
+            currentChar == '>' 
+        ){
+            if (targetDirection == "up"){
+                targetChar = '^';
+            }
+            else if (targetDirection == "down"){
+                targetChar = 'v';
+            }
+            else if (targetDirection == "left"){
+                targetChar = '<';
+            }
+            else if (targetDirection == "right"){
+                targetChar = '>';
+            }
+            else{
+                cout<<"Diretion Invalid"<<endl; 
+                return; 
+            }
+            
+            cout<< "Arrow "<< currentChar <<" is switched to "<<targetChar;
+            pf::updateBoard(targetRow, targetCol, targetChar);
+        }
+        else{
+            cout<<"Target Area is not an arrow"<<endl;
+            return ;
+        }
+    }
+
+    int pointDistance(int x1, int y1, int x2, int y2){
+        return (pow((x2-x1),2 ) + pow((y2-y1),2));
+    }
+
     void StartGame()
     {
         bool toQuit = false;
         
         while (not toQuit)
         {
+            // cout<<"hoho" <<pf::zombiePlayer[0].getZombieRow()<<" , "<<pf::zombiePlayer[0].getZombieCol()<<endl;
+            // cout<<"hoho" <<pf::zombiePlayer[1].getZombieRow()<<" , "<<pf::zombiePlayer[1].getZombieCol()<<endl;
+            // cout<<"hoho" <<pf::zombiePlayer[2].getZombieRow()<<" , "<<pf::zombiePlayer[2].getZombieCol()<<endl;
             pf::ShowGameBoard();
             string command, anyKey;
             cout << "command:";
@@ -402,6 +586,13 @@ namespace pf
             else if (command =="load"){
                 loadBoard();
             }
+            else if (command =="arrow"){
+                int targetRow, targetCol;
+                string direction; 
+                cout<<"Enter row, column, and direction:"<<endl;
+                cin >> targetRow >>targetCol >> direction; 
+                arrowChange(targetRow-1, targetCol-1, direction);
+            }
             if(command=="left" or command=="right" or command =="up" or command=="down"){
                 // Find who's turn
                 if (pf::alienPlayer.getIsMyTurn())
@@ -414,39 +605,24 @@ namespace pf
                         cin.ignore();
                         cin.get();
                         cin.clear();
-                        //cout << "Alien's turn ends .The trail is reset." << endl;
-                        //pf::ShowGameBoard();
-                        //cout << "Alien's turn ends .The trail is reset." << endl;
-                        //cout << "(Player) Press any key to continue . . .  \n";
-                        //cin.ignore();
-                        //cin.get();
-                        //cin.clear();
                         pf::alienPlayer.setAttack(0);
                         pf::resetBoard();
-                        pf::alienPlayer.setIsMyTurn(false);
-                        pf::zombiePlayer[0].setIsMyTurn(true);
+                        pf::passTurn();
                     }
                 }
                 for (int i = 0; i < pf::getZombieCount(); i++)
                 {
-                    if (pf::zombiePlayer[i].getIsMyTurn())
+                    if (pf::zombiePlayer[i].getIsMyTurn() and pf::zombiePlayer[i].getLife()>0)
                     {
                         pf::ShowGameBoard();
                         pf::zombiePlayer[i].move();
-                        pf::zombiePlayer[i].setIsMyTurn(false);
-                        if ((i + 1) % pf::getZombieCount() == 0)
-                        {
-                            pf::alienPlayer.setIsMyTurn(true);
-                        }
-                        else
-                        {
-                            pf::zombiePlayer[(i + 1) % pf::getZombieCount()].setIsMyTurn(true);
-                        }
+                        pf::alienPlayer = pf::zombiePlayer[i].attackAlien();
+                        pf::passTurn();
 
                         cout << "(Player) Press any key to continue . . .  \n";
                         cin.ignore();
-                        //cin.get();
-                        //cin.clear();
+                        cin.get();
+                        cin.clear();
                     }
                 }
             }

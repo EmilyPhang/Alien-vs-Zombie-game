@@ -24,8 +24,10 @@ void DisplayGameSettings(int row,int col,int zombie_count)
 
 int main()
 {   
-    int row = 5 ; //default
-    int col = 21 ; //default
+    // int row = 5 ; //default
+    // int col = 21 ; //defaul
+    int row = 3 ; //default
+    int col = 3 ; //default
     int zombie_count = 3 ; //default
     bool setting_option = false ; 
     string option = "N";

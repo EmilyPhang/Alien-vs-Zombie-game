@@ -30,7 +30,7 @@ Alien::Alien(char Logo){
 
 // Class Method (set)
 void Alien::setLife(int newLife){
-    this->Life = min(100, newLife);
+    this->Life = max(0, newLife);
 }
 
 void Alien::setAttack(int newAttack){
@@ -120,6 +120,7 @@ bool Alien::move(string command){
     
     if(valid){
         // cout<<"hihi"<<endl;
+        string old_command = command;
         command = touchGameObj(command, newRow, newCol);
         if (command == "rock"){
             // Change Rock to '.' so that later the reset will random generate
@@ -158,8 +159,18 @@ bool Alien::move(string command){
 
         }
         else if (command == "attack"){
-            attackZombie(newRow, newCol);
-            return false;
+            bool zombieAlive = attackZombie(newRow, newCol);
+            if (zombieAlive){
+                // end turn if zombie alive
+                cout<<"hehe"<<endl;
+                return false;
+            }
+            else{
+                // alien keep moving if zombie die
+                // cout<<"hoho"<<endl;
+                move(old_command);
+                return false;
+            }
         }
         
         //Move to new location
@@ -260,7 +271,7 @@ string Alien::touchGameObj(string command, int newRow, int newCol){
     }
     if(gameObj == 'p'){
         cout<<"Alien finds a pod."<<endl;
-        this->podBlast();
+        this->podBlast(newRow, newCol);
     }
     if(gameObj == 'r'){
         cout<<"Alien stumbles upon a rock."<<endl;
@@ -283,13 +294,13 @@ string Alien::touchGameObj(string command, int newRow, int newCol){
     return command;
 }
 
-void Alien::podBlast(){
-    int minDistance = this->ZombieMinDistance();
+void Alien::podBlast(int newRow, int newCol){
+    int minDistance = this->ZombieMinDistance(newRow, newCol);
     // cout<<"Min Distance: "<<minDistance<<endl;
     Zombie* zombiePLayer = pf::getZombiePlayer();
     for(int i=0; i<pf::getZombieCount(); i++){
         int zombieLife =  zombiePLayer[i].getLife(); 
-        int alienZombieDistance = pointDistance(this->AlienRow, this->AlienCol, 
+        int alienZombieDistance = pf::pointDistance(newRow, newCol, 
                                                 zombiePLayer[i].getZombieRow(), zombiePLayer[i].getZombieCol());
 
         // cout<<zombiePLayer[i].getZombieLogo()<<" : "<<alienZombieDistance<<endl;
@@ -302,7 +313,7 @@ void Alien::podBlast(){
     }
 }
 
-void Alien::attackZombie(int newRow, int newCol){
+bool Alien::attackZombie(int newRow, int newCol){
     Zombie* zombiePLayer = pf::getZombiePlayer();
     for(int i=0; i<pf::getZombieCount(); i++){
         if(zombiePLayer[i].getLife() > 0 and 
@@ -311,24 +322,27 @@ void Alien::attackZombie(int newRow, int newCol){
                 int zombieLife = zombiePLayer[i].getLife();
                 zombieLife -= this->Attack;
                 zombiePLayer[i].setLife(zombieLife);
+                if (zombieLife > 0 ){
+                    // The zombie alive, turn contiue
+                    return true;
+                }
         }
     }
+    return false;
 }
 
 //Formula 
-int Alien::pointDistance(int x1, int y1, int x2, int y2){
-    return (pow((x2-x1),2 ) + pow((y2-y1),2));
-}
-
-int Alien::ZombieMinDistance(){
+int Alien::ZombieMinDistance(int newRow, int newCol){
     Zombie* zombiePLayer = pf::getZombiePlayer();
     int minDistance = pf::getBoardRow() * pf::getBoardCol(); 
     for(int i=0; i<pf::getZombieCount(); i++){
         if(zombiePLayer[i].getLife() > 0){
-            int alienZombieDistane = pointDistance(this->AlienRow, this->AlienCol, 
+            int alienZombieDistane = pf::pointDistance(newRow, newCol, 
                                                 zombiePLayer[i].getZombieRow(), zombiePLayer[i].getZombieCol());
+            cout<<"Distance: "<<alienZombieDistane<<endl;
             minDistance = min(minDistance, alienZombieDistane);
         }
     }
+    cout<<"Min Distance: "<<minDistance<<endl;
     return minDistance;
 }

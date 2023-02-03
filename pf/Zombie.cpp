@@ -9,6 +9,7 @@
 // ********************************************************* 
 #include "helper.h"
 #include "Zombie.h"
+#include "Alien.h"
 #include <cstdlib>
 #include <iostream>
 using namespace std;
@@ -18,11 +19,21 @@ Zombie::Zombie(){
 
 }
 
-Zombie::Zombie(char Logo){
+Zombie::Zombie(char Logo, int row, int col){
     this->Life = max(10, (rand()%20) * 10); 
     this->Attack = max(10, (rand()%10) * 10);
     this->ZombieLogo = Logo;
     this->isMyTurn = false;     //Alien go first
+    this->ZombieRow = row;
+    this->ZombieCol = col;
+}
+
+Zombie::Zombie(char Logo, bool isMyTurn, int life, int attack, int range){
+    this->ZombieLogo = Logo;
+    this->isMyTurn = isMyTurn; 
+    this->Life = life;
+    this->Attack = attack;
+    this->Range = range;
 }
 
 
@@ -117,10 +128,13 @@ void Zombie::move(){
     int newRow, newCol;
     int boardRow = pf::getBoardRow();
     int boardCol = pf::getBoardCol();
+    int retryCounter = 0; 
     
     do{
         newRow = this->getZombieRow();
         newCol = this->getZombieCol();
+        retryCounter ++; 
+        cout<<"Zombie Tried to move. Retry: " <<retryCounter<<endl;
 
         if(newRow==0 and newCol == 0){
         // Now at Top Left; Can move Right/Bottom
@@ -216,7 +230,12 @@ void Zombie::move(){
                 break;
             }
         }
-    }while (not touchGameObj(newRow, newCol));
+    }while (not touchGameObj(newRow, newCol) and retryCounter<=10);
+
+    if(retryCounter >= 10){
+        cout<<"Unable to move after 10 try"<<endl;
+        return; 
+    }
 
     if(newRow - this->getZombieRow() < 0 and
         newCol == this->getZombieCol()){
@@ -246,24 +265,25 @@ bool Zombie::moveValidation(int newRow, int newCol){
     int boardRow = pf::getBoardRow();
     int boardCol = pf::getBoardCol();
     //cout<<"Next: "<<newRow<<","<<newCol<<endl;
-    if(newRow == 0){
+    if(newRow < 0){
         cout<<"Zombie Hit Top Border"<<endl;
         return false;
     }
-    else if (newCol == 0 ){
+    else if (newCol < 0 ){
         cout<<"Zombie Hit Left Border"<<endl;
         return false;
     }
-    else if (newRow == boardRow-1){
+    else if (newRow >= boardRow){
         cout<<"Zombie Hit Bottom Border"<<endl;
         return false;
     }
-    else if (newCol == boardCol-1){
+    else if (newCol >= boardCol){
         cout<<"Zombie Hit Right Border"<<endl;
         return false;
     }
+    bool validity = pf::validLocation(newRow, newCol);
 
-    return true;
+    return validity;
 }
 
 bool Zombie::touchGameObj(int newRow, int newCol){
@@ -274,4 +294,16 @@ bool Zombie::touchGameObj(int newRow, int newCol){
         }
     }
     return false;
+}
+
+Alien Zombie::attackAlien(){
+    Alien alienPlayer = pf::getAlienPlayer(); // copy of alien
+    int distance = pf::pointDistance(this->ZombieRow, this->ZombieRow, alienPlayer.getAlienRow(), alienPlayer.getAlienCol());
+    if(distance <= this->Range){
+        int alienLife = alienPlayer.getLife();
+        alienLife -= this->Attack; 
+        alienPlayer.setLife(alienLife);
+        cout<<"Zombie "<<this->getZombieLogo() <<" attacked Alien with damage of "<<this->Attack<<endl;
+    }
+    return alienPlayer; 
 }

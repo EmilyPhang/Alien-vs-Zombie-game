@@ -38,12 +38,11 @@ class Alien {
         bool move(std::string command);
         bool moveValidation(int newRow, int newCol);
         std::string touchGameObj(std::string command, int newRow, int newCol);
-        void podBlast();
-        void attackZombie(int newRow, int newCol);
+        void podBlast(int newRow, int newCol);
+        bool attackZombie(int newRow, int newCol);
 
         // Formula
-        int pointDistance(int x1, int y1, int x2, int y2);
-        int ZombieMinDistance();
+        int ZombieMinDistance(int newRow, int newCol);
 };
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
+#include "Alien.h"
 
 class Zombie {
     private:
@@ -13,7 +14,8 @@ class Zombie {
     public: 
         // Constructor 
         Zombie();
-        Zombie(char Logo);
+        Zombie(char Logo, int row, int col);
+        Zombie(char Logo, bool isMyTurn, int life, int attack, int range);
 
         //setter
         void setLife(int newLife);
@@ -41,6 +43,8 @@ class Zombie {
         void move();
         bool moveValidation(int newRow, int newCol);
         bool touchGameObj(int newRow, int newCol);
+        Alien attackAlien();
+        
 };
 
 #endif
