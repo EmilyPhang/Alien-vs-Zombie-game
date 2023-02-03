@@ -101,6 +101,7 @@ bool Alien::move(string command){
     // cout<<command;
     int newRow = this->getAlienRow();
     int newCol = this->getAlienCol();
+    
     if(command == "up"){
         newRow -= 1; //up
     }
@@ -172,13 +173,29 @@ bool Alien::move(string command){
                 return false;
             }
             else{
+                bool toWin = false;
+                Zombie* zombiePLayer = pf::getZombiePlayer();
+                for (int i = 0; i < pf::getZombieCount(); i++){
+                            if(zombiePLayer[i].getLife()!=0){
+                                toWin = false;
+                                break;
+                                }
+                            else {
+                                toWin = true;
+                                continue;
+                                }
+                            }
+                if (toWin == true){
+                            cout << "Congratulations all zombies are dead, Alien won!" <<endl;
+                            return false;
+
                 // alien keep moving if zombie die
                 // cout<<"hoho"<<endl;
                 move(old_command);
                 return false;
+                }
             }
         }
-        
         //Move to new location
         setLocation(newRow, newCol);        
 
@@ -210,6 +227,7 @@ bool Alien::move(string command){
         return false; // Stop
     }
     return false;
+
 }
 
 //remove later after end product is complete
@@ -332,6 +350,7 @@ bool Alien::attackZombie(int newRow, int newCol){
                     // The zombie alive, turn contiue
                     return true;
                 }
+
         }
     }
     return false;

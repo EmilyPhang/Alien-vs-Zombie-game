@@ -602,7 +602,8 @@ namespace pf
             if(command=="left" or command=="right" or command =="up" or command=="down"){
                 // Find who's turn
                 if (pf::alienPlayer.getIsMyTurn())
-                {
+                {   
+                    bool toWin = false;
                     // Alien Turn
                     if (pf::alienPlayer.move(command) == false)
                     {
@@ -612,10 +613,28 @@ namespace pf
                         cin.get();
                         cin.clear();
                         pf::alienPlayer.setAttack(0);
+                        //Check if Alien wins
+                        
+                        for (int i = 0; i < pf::getZombieCount(); i++){
+                            if(pf::zombiePlayer[i].getLife()!=0){
+                                toWin = false;
+                                break;
+                                }
+                            else {
+                                toWin = true;
+                                continue;
+                                }
+                            }
+                        }
+                        if (toWin == true){
+                            
+                            break;
+                        }
                         pf::resetBoard();
                         pf::passTurn();
                     }
                 }
+                
                 for (int i = 0; i < pf::getZombieCount(); i++)
                 {
                     if (pf::zombiePlayer[i].getIsMyTurn() and pf::zombiePlayer[i].getLife()>0)
@@ -653,6 +672,6 @@ namespace pf
 
 
             }
-        }
+        
     
 
