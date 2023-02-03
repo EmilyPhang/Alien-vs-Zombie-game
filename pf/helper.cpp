@@ -317,7 +317,8 @@ namespace pf
         int kColumns = pf::boardCol;
         int width = kRows % 2 == 1 ? kRows / 2 : kRows / 2 + 1;
         //kRows % 2 == 1 ? kRows / 2 : kRows / 2 + 1;
-        cout <<setw((kColumns)*2);
+        //cout <<setw((kColumns)*2);
+        cout <<setw(29);
         cout << ".: Alien vs Zombie :. " << endl;
         for (int row = 0; row < kRows; row++)
         {
@@ -526,8 +527,11 @@ namespace pf
                 return; 
             }
             
-            cout<< "Arrow "<< currentChar <<" is switched to "<<targetChar;
+            cout<< "Arrow "<< currentChar <<" is switched to ."<<targetChar;
             pf::updateBoard(targetRow, targetCol, targetChar);
+            cout<<"\nPress any key to continue . . .  "<<endl;
+            cin.ignore();
+            cin.get();
         }
         else{
             cout<<"Target Area is not an arrow"<<endl;

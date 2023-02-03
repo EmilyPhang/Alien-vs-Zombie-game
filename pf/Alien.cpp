@@ -162,6 +162,12 @@ bool Alien::move(string command){
             bool zombieAlive = attackZombie(newRow, newCol);
             if (zombieAlive){
                 // end turn if zombie alive
+                cout << "\nPress any key to continue . . .  ";
+                cin.ignore();
+                cin.get();
+                pf::ShowGameBoard();
+                // pf::getBoardChar(newRow, newCol);
+                cout << "Alien's turn ends .The trail is reset." << endl;
                 cout<<"hehe"<<endl;
                 return false;
             }
