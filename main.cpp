@@ -26,9 +26,9 @@ int main()
 {   
     // int row = 5 ; //default
     // int col = 21 ; //defaul
-    int row = 3 ; //default
-    int col = 3 ; //default
-    int zombie_count = 3 ; //default
+    int row = 5 ; //default
+    int col = 9 ; //default
+    int zombie_count = 1 ; //default
     bool setting_option = false ; 
     string option = "N";
     cout << "Assignment (Part 1)" << endl;
