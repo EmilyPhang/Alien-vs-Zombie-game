@@ -114,10 +114,10 @@ bool Alien::move(string command){
     else if (command == "right"){
         newCol += 1; //right
     }
-    cout<<"Next: "<<newRow<<","<<newCol<<endl;
+    //cout<<"Next: "<<newRow<<","<<newCol<<endl;
     // Get current location item
     bool valid = moveValidation(newRow, newCol);
-    cout<<"Valid: "<<valid<<endl;   
+    //cout<<"Valid: "<<valid<<endl;   
     
     if(valid){
         // cout<<"hihi"<<endl;
@@ -150,7 +150,12 @@ bool Alien::move(string command){
             }
             pf::updateBoard(newRow, newCol, newObj);
             pf::updateBoard(this->AlienRow, this->AlienCol, this->getAlienLogo());
-            // cout << "Alien's turn ends .The trail is reset." << endl;
+            cout<<"Press any key to continue . . . \n";
+            cin.ignore();
+            cin.get();
+            //cin.clear();
+            pf::ShowGameBoard();
+            cout << "Alien's turn ends .The trail is reset." << endl;
             return false;
             // cout<<"Press any key to continue . . . \n";
             // cin.ignore();
@@ -163,13 +168,13 @@ bool Alien::move(string command){
             bool zombieAlive = attackZombie(newRow, newCol);
             if (zombieAlive){
                 // end turn if zombie alive
-                cout << "\nPress any key to continue . . .  ";
+                cout << "Press any key to continue . . .  ";
                 cin.ignore();
                 cin.get();
                 pf::ShowGameBoard();
                 // pf::getBoardChar(newRow, newCol);
                 cout << "Alien's turn ends .The trail is reset." << endl;
-                cout<<"hehe"<<endl;
+                //cout<<"hehe"<<endl;
                 return false;
             }
             else{
@@ -200,7 +205,7 @@ bool Alien::move(string command){
         setLocation(newRow, newCol);        
 
         // Wait for next step
-        cout<<"(Alien) Press Enter to continue . . . \n";
+        cout<<"(Alien) Press Enter to continue . . . ";
         cin.ignore();
         cin.get();
         cin.clear();
@@ -214,13 +219,13 @@ bool Alien::move(string command){
         // setLocation(newRow, newCol);
         cout<<"Press any key to continue . . .  ";
         cin.ignore();
-        //cin.get();
-        pf::ShowGameBoard();
-        // pf::getBoardChar(newRow, newCol);
-        cout<<"Alien hits a border."<<endl;
-        cout<<"else..."<<endl;
-        cout<<"Press any key to continue . . .  ";
-        cin.ignore();
+        // //cin.get();
+        //pf::ShowGameBoard();
+        // // pf::getBoardChar(newRow, newCol);
+        //cout<<"Alien hits a border."<<endl;
+        // //cout<<"else..."<<endl;
+        //cout<<"Press any key to continue . . .  ";
+        //cin.ignore();
         pf::ShowGameBoard();
         // pf::getBoardChar(newRow, newCol);
         cout << "Alien's turn ends .The trail is reset." <<endl;
@@ -230,7 +235,6 @@ bool Alien::move(string command){
 
 }
 
-//remove later after end product is complete
 bool Alien::moveValidation(int newRow, int newCol){ 
     // Check if the next movement at boarder
     int boardRow = pf::getBoardRow();
@@ -238,22 +242,22 @@ bool Alien::moveValidation(int newRow, int newCol){
     // cout<<"Next: "<<newRow<<","<<newCol<<endl;
 
     if(newRow < 0){
-        cout<<"Alien Hit Top Border"<<endl;
+        cout<<"Alien hit a top border."<<endl;
         // pf::getBoardChar(newRow, newCol);
         return false;
     }
     else if (newCol < 0 ){
-        cout<<"Alien Hit Left Border"<<endl;
+        cout<<"Alien hit a left border."<<endl;
         // pf::getBoardChar(newRow, newCol);
         return false;
     }
     else if (newRow >= boardRow){
-        cout<<"Alien Hit Bottom Border"<<endl;
+        cout<<"Alien hit a bottom border."<<endl;
         // pf::getBoardChar(newRow, newCol);
         return false;
     }
     else if (newCol >= boardCol){
-        cout<<"Alien Hit Right Border"<<endl;
+        cout<<"Alien hit a right border."<<endl;
         // pf::getBoardChar(newRow, newCol);
         return false;
     }
@@ -290,7 +294,7 @@ string Alien::touchGameObj(string command, int newRow, int newCol){
     if(gameObj == 'h'){
         this->setLife(this->Life += 20);
         cout<<"Alien finds a health pack."<<endl;
-        cout<<"Alien's life is increased by 20."<<endl;
+        cout<<"Alien's life is increased by 20.\n\n";
      
     }
     if(gameObj == 'p'){
@@ -302,7 +306,7 @@ string Alien::touchGameObj(string command, int newRow, int newCol){
         return "rock";
     }
     if(gameObj == ' '){
-        cout<<"Alien finds a empty space\n\n";
+        cout<<"Alien finds a empty space.\n\n";
     }
     
     Zombie* zombiePLayer = pf::getZombiePlayer();
@@ -326,7 +330,9 @@ void Alien::podBlast(int newRow, int newCol){
         int zombieLife =  zombiePLayer[i].getLife(); 
         int alienZombieDistance = pf::pointDistance(newRow, newCol, 
                                                 zombiePLayer[i].getZombieRow(), zombiePLayer[i].getZombieCol());
-
+        if(newRow !=zombiePLayer[i].getZombieRow()){
+            alienZombieDistance +=1;
+        }
         // cout<<zombiePLayer[i].getZombieLogo()<<" : "<<alienZombieDistance<<endl;
         if(zombieLife > 0 and alienZombieDistance==minDistance ){
             cout<<"Zombie "<<zombiePLayer[i].getZombieLogo()<<" receives a damage of 10."<<endl;
@@ -365,11 +371,13 @@ int Alien::ZombieMinDistance(int newRow, int newCol){
             
             int alienZombieDistance = pf::pointDistance(newRow, newCol, 
                                                 zombiePLayer[i].getZombieRow(), zombiePLayer[i].getZombieCol());
-            
-            cout<<"Distance: "<<alienZombieDistance<<endl;
+            if(newRow !=zombiePLayer[i].getZombieRow()){
+            alienZombieDistance +=1;
+        }
+            //cout<<"Distance: "<<alienZombieDistance<<endl;
             minDistance = min(minDistance, alienZombieDistance);
         }
     }
-    cout<<"Min Distance: "<<minDistance<<endl;
+    //cout<<"Min Distance: "<<minDistance<<endl;
     return minDistance;
 }

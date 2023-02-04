@@ -180,9 +180,9 @@ namespace pf
             while(validity){
                 zombieRow = std::rand() % kRows;
                 zombieCol = std::rand() % kColumns;
-                cout<<"hihi" << zombieRow <<","<<zombieCol<<endl;
+                //cout<<"hihi" << zombieRow <<","<<zombieCol<<endl;
                 validity = validLocation(zombieRow,zombieCol);
-                cout<<"Valid: "<<validity<<endl;
+                //cout<<"Valid: "<<validity<<endl;
             }
            
 
@@ -224,21 +224,21 @@ namespace pf
         Zombie* zombiePlayer =  pf::getZombiePlayer();
         Alien alienPlayer = pf::getAlienPlayer(); 
         cout<<endl;
-        cout<<"Next: "<<newRow <<","<<newCol<<endl;
-        cout<<"Alien: "<<alienPlayer.getAlienRow()<<","<< alienPlayer.getAlienCol()<<endl;
+        //cout<<"Next: "<<newRow <<","<<newCol<<endl;
+        //cout<<"Alien: "<<alienPlayer.getAlienRow()<<","<< alienPlayer.getAlienCol()<<endl;
         for(int i=0; i<pf::getZombieCount(); i++){
-            cout<<"Zombie "<<i<<" : "<<zombiePlayer[i].getZombieRow()<<","<<zombiePlayer[i].getRange()<<endl;
+            //cout<<"Zombie "<<i<<" : "<<zombiePlayer[i].getZombieRow()<<","<<zombiePlayer[i].getRange()<<endl;
             if (alienPlayer.getAlienRow() == newRow and
                 alienPlayer.getAlienCol() == newCol )
                 {
-                    cout<<"Retry"<<endl;
+                    //cout<<"Retry"<<endl;
                     return true; 
                 }
             if(
                 zombiePlayer[i].getZombieRow() == newRow and 
                 zombiePlayer[i].getZombieCol() == newCol 
                 ){
-                    cout<<"Retry"<<endl;
+                    //cout<<"Retry"<<endl;
                     return true; 
                 }
         }
@@ -246,14 +246,14 @@ namespace pf
     }
 
     void passTurn(){
-        cout<<"Passing world"<<endl;
+        //cout<<"Passing world"<<endl;
         if(pf::alienPlayer.getIsMyTurn()){
             //Alien to Zombie
             pf::alienPlayer.setIsMyTurn(false);
             // Search for a valid zombie to pass to
             for(int i =0 ; i<pf::getZombieCount() ; i++){
                 if (pf::zombiePlayer[i].getLife()>0){
-                    cout<<"Alien pass to Zombie "<<i+1<<endl;
+                    //cout<<"Alien pass to Zombie "<<i+1<<endl;
                     pf::zombiePlayer[i].setIsMyTurn(true);
                     return ; 
                 }
@@ -268,12 +268,12 @@ namespace pf
                     for(int next = i+1 ; next <= pf::getZombieCount() ; next++){
                          //Last zombie pass back to alien
                         if(next==pf::getZombieCount()){
-                            cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Alien"<<endl;
+                            //cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Alien"<<endl;
                             pf::alienPlayer.setIsMyTurn(true);
                             return ; 
                         }
                         if(pf::zombiePlayer[next].getLife()>0){
-                            cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Zombie "<<pf::zombiePlayer[next].getZombieLogo()<<endl;
+                            //cout<<"Zombie "<<pf::zombiePlayer[i].getZombieLogo()<<" pass to Zombie "<<pf::zombiePlayer[next].getZombieLogo()<<endl;
                             pf::zombiePlayer[next].setIsMyTurn(true);
                             return ; 
                         }
@@ -420,8 +420,8 @@ namespace pf
 
         numZombie -= 1; // Remove alien 
         numRows -= 1; // Remove "==="
-        cout<<"Number of lines in the file are: "<<numRows<<endl;
-        cout<<"Number of Zombie: "<<numZombie<<endl;
+        //cout<<"Number of lines in the file are: "<<numRows<<endl;
+        //cout<<"Number of Zombie: "<<numZombie<<endl;
 
         // create board 2d array
         kBoardPointer = new char *[numRows];         //row
@@ -541,6 +541,7 @@ namespace pf
             cout<<"\nPress any key to continue . . .  "<<endl;
             cin.ignore();
             cin.get();
+            cin.clear();
         }
         else{
             cout<<"Target Area is not an arrow"<<endl;
@@ -576,15 +577,15 @@ namespace pf
             {
                 cout << endl;
                 cout << "Commands" << endl;
-                cout << "1. up      -Move up." << endl;
-                cout << "2. down    -Move down." << endl;
+                cout << "1.up      -Move up." << endl;
+                cout << "2.down    -Move down." << endl;
                 cout << "3.left     -Move left." << endl;
                 cout << "4.right    -Move right." << endl;
                 cout << "5.arrow    -Change the direction of an arrow." << endl;
                 cout << "6.help     -Display these user commands." << endl;
                 cout << "7.save     -Save the game." << endl;
                 cout << "8.load     -Load a game." << endl;
-                cout << "9.quit     -Quit the game" << endl;
+                cout << "9.quit     -Quit the game." << endl;
                 cout<<"Press any key to continue . . . \n ";
                 cin.ignore();
                 cin.get();
@@ -627,7 +628,7 @@ namespace pf
                     if (pf::alienPlayer.move(command) == false)
                     {
                         // change turn when move is false
-                        cout << "(Player) Press any key to continue . . .  \n";
+                        cout << "(Player) Press any key to continue . . .  ";
                         cin.ignore();
                         cin.get();
                         cin.clear();
@@ -661,7 +662,7 @@ namespace pf
                         pf::ShowGameBoard();
                         pf::zombiePlayer[i].move();
                         pf::alienPlayer = pf::zombiePlayer[i].attackAlien();
-                        cout << "(Player) Press any key to continue . . .  \n";
+                        cout << "(Player) Press any key to continue . . .  ";
                         cin.ignore();
                         cin.get();
                         cin.clear();
@@ -676,10 +677,10 @@ namespace pf
         
                         pf::passTurn();
 
-                        cout << "(Player) Press any key to continue . . .  \n";
-                        cin.ignore();
-                        cin.get();
-                        cin.clear();
+                        // cout << "(Player) Press any key to continue . . .  \n";
+                        // cin.ignore();
+                        // cin.get();
+                        // cin.clear();
                     }
                 }
                 int alienLife = alienPlayer.getLife();

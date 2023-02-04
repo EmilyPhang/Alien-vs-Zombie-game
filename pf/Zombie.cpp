@@ -41,12 +41,12 @@ Zombie::Zombie(char Logo, bool isMyTurn, int life, int attack, int range){
 void Zombie::setLife(int newLife){
     this->Life = max(0, newLife); 
     if(this->Life>0){
-        cout<<"Zombie "<<this->getZombieLogo()<<" is still alive."<<endl;
+        cout<<"Zombie "<<this->getZombieLogo()<<" is still alive.\n\n";
         
         }
     else{
         pf::updateBoard(this->getZombieRow(),this->getZombieCol(), '.');
-        cout<<"Zombie "<<this->getZombieLogo()<<" is dead"<<endl;
+        cout<<"Zombie "<<this->getZombieLogo()<<" is dead.\n\n";
     }
 }
 
@@ -134,7 +134,7 @@ void Zombie::move(){
         newRow = this->getZombieRow();
         newCol = this->getZombieCol();
         retryCounter ++; 
-        cout<<"Zombie Tried to move. Retry: " <<retryCounter<<endl;
+        //cout<<"Zombie Tried to move. Retry: " <<retryCounter<<endl;
 
         if(newRow==0 and newCol == 0){
         // Now at Top Left; Can move Right/Bottom
@@ -303,12 +303,12 @@ Alien Zombie::attackAlien(){
                 distance +=1;
                 
             }
-    cout<< distance <<endl;
+    //cout<< distance <<endl;
     if(distance <= this->Range){
         int alienLife = alienPlayer.getLife();
         alienLife -= this->Attack; 
         alienPlayer.setLife(alienLife);
-        cout<<"Zombie "<<this->getZombieLogo() <<" attacked Alien with damage of "<<this->Attack<<endl;
+        cout<<"Zombie "<<this->getZombieLogo() <<" attacks Alien with damage of "<<this->Attack<<endl;
         
     }
     return alienPlayer; 
