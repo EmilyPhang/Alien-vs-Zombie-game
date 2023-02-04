@@ -2,7 +2,7 @@
 
 Alien vs. Zombie is a text-based version game. In this game, the player navigates an alien on a path to destroy zombies. It combines several elements of role-playing game, path-planning, and strategy to provide a unique gaming experience.
 
-![Alt text](/image.png) <- change
+![Alt text](/image.png)
 
 
 YouTube link to [Video Demo](https://youtu.be/7w4Kk9M5Xk0). <- change
