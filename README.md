@@ -23,8 +23,6 @@ To compile this program, type the following in the terminal
 
 ## User Manual
 
-Please provide the user manual on how to use your program.
-
 Player will be able to choose whether they want to use the default game board or change the settings according to their preferences. The rows and columns can only be odd number whereas the minimum number of zombie is 1 and maximum is 9.
 
 Player will begin the game as an Alien. The Alien will win if the Alien defeated all the zombies without dying. ALien will lose if its life becomes 0 without defeating all the zombies. 
