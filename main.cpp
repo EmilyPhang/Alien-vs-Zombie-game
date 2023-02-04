@@ -33,6 +33,9 @@ int main(){
       int zombie_count = 2 ; //default
       bool setting_option = false ; 
       string option = "N";
+      cout <<endl;
+      cout << "Alien vs Zombie Program Launched!" << endl;
+      cout << "Let's play!" << endl;
       //cout << "Assignment (Part 1)" << endl;
       //cout << "Let's Get Started!" << endl;
       DisplayGameSettings(row, col, zombie_count);
