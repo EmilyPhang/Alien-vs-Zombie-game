@@ -2,10 +2,10 @@
 
 Alien vs. Zombie is a text-based version game. In this game, the player navigates an alien on a path to destroy zombies. It combines several elements of role-playing game, path-planning, and strategy to provide a unique gaming experience.
 
-![Alt text](/image.png)
+![Alt text](/image.png) <- change
 
 
-YouTube link to [Video Demo](https://youtu.be/7w4Kk9M5Xk0).
+YouTube link to [Video Demo](https://youtu.be/7w4Kk9M5Xk0). <- change
 
 ## Compilation Instructions
 
@@ -50,7 +50,6 @@ Player can type "save" as a command to save the current game to a file. Player c
 
 That's all for user manual. Have fun playing!
 
-Please DO NOT change the Progress Log below. Leave it as it is.
 
 ## Progress Log
 
@@ -58,8 +57,6 @@ Please DO NOT change the Progress Log below. Leave it as it is.
 - [Part 2](PART2.md)
 
 ## Contributors
-
-Please replace the following with your group members' names. 
 
 - Emily Phang Ru Ying
 - Lim Cai Qing
