@@ -5,7 +5,7 @@ Alien vs. Zombie is a text-based version game. In this game, the player navigate
 ![Alt text](/image.png)
 
 
-YouTube link to [Video Demo](https://youtu.be/7w4Kk9M5Xk0). <- change
+YouTube link to [Video Demo](https://youtu.be/nhdsgx_0-4o).
 
 ## Compilation Instructions
 
