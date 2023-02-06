@@ -193,13 +193,14 @@ bool Alien::move(string command){
                 if (toWin == true){
                             cout << "Congratulations all zombies are dead, Alien won!" <<endl;
                             return false;
+                }
 
                 // alien keep moving if zombie die
                 // cout<<"hoho"<<endl;
                 move(old_command);
                 return false;
                 }
-            }
+            
         }
         //Move to new location
         setLocation(newRow, newCol);        
@@ -353,7 +354,7 @@ bool Alien::attackZombie(int newRow, int newCol){
                 zombieLife -= this->Attack;
                 zombiePLayer[i].setLife(zombieLife);
                 if (zombieLife > 0 ){
-                    // The zombie alive, turn contiue
+                    // The zombie alive, turn continue
                     return true;
                 }
 
