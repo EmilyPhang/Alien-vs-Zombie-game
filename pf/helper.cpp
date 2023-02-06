@@ -577,8 +577,8 @@ namespace pf
             {
                 cout << endl;
                 cout << "Commands" << endl;
-                cout << "1.up      -Move up." << endl;
-                cout << "2.down    -Move down." << endl;
+                cout << "1.up       -Move up." << endl;
+                cout << "2.down     -Move down." << endl;
                 cout << "3.left     -Move left." << endl;
                 cout << "4.right    -Move right." << endl;
                 cout << "5.arrow    -Change the direction of an arrow." << endl;
